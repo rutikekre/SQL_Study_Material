@@ -594,6 +594,24 @@ ORDER BY user_id;
 *---------------------------------------------------*
 
 
+###  28. Biggest Single Number
+[Click here to see question](
+ https://leetcode.com/problems/biggest-single-number/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT MAX(num) as num
+FROM (SELECT num
+FROM Mynumbers
+GROUP BY num
+HAVING COUNT(num) = 1) as s;
+```
+
+
+*---------------------------------------------------*
+
+
 ###  29. Customers Who Bought All Products
 [Click here to see question](
  https://leetcode.com/problems/customers-who-bought-all-products/description/?envType=study-plan-v2&envId=top-sql-50)
@@ -727,4 +745,432 @@ WITH CTE AS (
 SELECT person_name
 FROM CTE
 WHERE turn = (SELECT MAX(turn) FROM CTE);
+```
+
+
+
+*---------------------------------------------------*
+
+
+###  36. Count Salary Categories
+[Click here to see question](
+https://leetcode.com/problems/count-salary-categories/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE1 as(
+    SELECT 'Low Salary' as Category
+    UNION ALL
+    SELECT 'Average Salary' as Category
+    UNION ALL
+    SELECT 'High Salary' as Category
+),
+
+CTE2 as(
+    SELECT 
+    CASE 
+        WHEN income < 20000
+        THEN 'Low Salary'
+        WHEN income BETWEEN 20000 AND 50000
+        THEN 'Average Salary'
+        WHEN income > 50000
+        THEN 'High Salary'
+    END as category1, 
+    COUNT(account_id) as accounts_count
+
+    FROM Accounts 
+    GROUP BY category1
+)
+
+
+SELECT CTE1.category, COALESCE(accounts_count,0) as accounts_count
+FROM CTE1 LEFT JOIN CTE2
+ON CTE1.Category = CTE2.category1;
+```
+
+
+*---------------------------------------------------*
+
+
+###  37. Employees Whose Manager Left the Company
+[Click here to see question](
+https://leetcode.com/problems/employees-whose-manager-left-the-company/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT DISTINCT employee_id
+FROM Employees
+WHERE manager_id NOT IN (SELECT DISTINCT employee_id FROM Employees)
+AND manager_id IS NOT NULL
+AND salary < 30000
+ORDER BY employee_id;
+```
+
+
+*---------------------------------------------------*
+
+
+###  38. Exchange Seats
+[Click here to see question](
+https://leetcode.com/problems/exchange-seats/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH Swapping AS(
+    SELECT id, student, LEAD(id) OVER(ORDER BY id) as nextId
+    FROM Seat     
+)
+
+SELECT (CASE 
+            WHEN MOD(id,2) = 1 AND nextId IS NOT NULL
+            THEN nextId
+            WHEN MOD(id,2) = 1 AND nextId IS NULL
+            THEN id
+            ELSE
+                id-1
+        END) as id,
+        student
+FROM Swapping
+ORDER BY id;
+```
+
+
+*---------------------------------------------------*
+
+
+###  39. Movie Rating
+[Click here to see question](
+https://leetcode.com/problems/movie-rating/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH max_user_rating AS (
+    SELECT user_id, COUNT(movie_id) as cnt
+    FROM MovieRating
+    GROUP BY user_id
+),
+
+user_rank AS(
+    SELECT user_id, cnt, RANK() OVER(ORDER BY cnt DESC) as RN1
+    FROM max_user_rating
+),
+
+top_user AS(
+    SELECT UR.user_id, name, RANK() OVER(ORDER BY name ASC) as RN2
+    FROM user_rank UR LEFT JOIN Users U
+    ON UR.user_id = U.user_id
+    WHERE RN1 = 1
+),
+
+avg_rating_movie AS(
+    SELECT movie_id, AVG(rating) as avg_rating
+    FROM MovieRating
+    WHERE created_at BETWEEN '2020-02-01' AND '2020-02-29'
+    GROUP BY movie_id
+),
+
+movie_rating_rank AS(
+    SELECT movie_id, avg_rating, RANK() OVER(ORDER BY avg_rating DESC) as RN1
+    FROM avg_rating_movie
+),
+
+top_rated_movie AS(
+    SELECT MRR.movie_id, title, RANK() OVER(ORDER BY title ASC) as RN2
+    FROM movie_rating_rank MRR LEFT JOIN Movies M
+    ON MRR.movie_id = M.movie_id
+    WHERE RN1 = 1
+)
+
+SELECT name as results FROM top_user WHERE RN2=1
+UNION ALL
+SELECT title as results FROM top_rated_movie WHERE RN2=1;
+```
+
+
+
+*---------------------------------------------------*
+
+
+###  40. Restaurant Growth
+[Click here to see question](
+https://leetcode.com/problems/restaurant-growth/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE AS(
+    SELECT DISTINCT visited_on FROM Customer
+),
+
+CTE2 AS (
+    SELECT C1.visited_on, SUM(C2.amount) as amount
+    FROM CTE C1 LEFT JOIN Customer C2
+    ON C1.visited_on >= C2.visited_on AND
+    DATEDIFF(C1.visited_on, C2.visited_on) <= 6
+    GROUP BY C1.visited_on
+    HAVING COUNT(DISTINCT C2.visited_on) = 7
+)
+
+SELECT visited_on, amount, ROUND(amount/7,2) as average_amount
+FROM CTE2;
+```
+
+
+
+*---------------------------------------------------*
+
+
+###  41. Friend Requests II: Who Has the Most Friends
+[Click here to see question](
+https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE1 AS(
+    SELECT requester_id, COUNT(accepter_id) as cnt1
+    FROM RequestAccepted 
+    GROUP BY requester_id
+),
+
+CTE2 AS(
+    SELECT accepter_id, COUNT(requester_id) as cnt2
+    FROM RequestAccepted 
+    GROUP BY accepter_id
+),
+
+CTE3 as (
+    SELECT requester_id as id, cnt1 as cnt FROM CTE1
+    UNION ALL
+    SELECT accepter_id as id, cnt2 as cnt FROM CTE2
+),
+
+CTE4 AS(
+    SELECT id, SUM(cnt) as num
+    FROM CTE3
+    GROUP BY id
+)
+    
+SELECT * FROM CTE4
+WHERE num = (SELECT MAX(num) FROM CTE4);
+```
+
+
+
+*---------------------------------------------------*
+
+
+###  42. Investments in 2016
+[Click here to see question](
+https://leetcode.com/problems/investments-in-2016/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE_Duplicate_tiv_2015 AS(
+    SELECT tiv_2015 as dup
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(pid) > 1
+),
+
+CTE_UNIQUE_LAT_LAN AS(
+    SELECT lat as U_lat, lon as U_lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(PID) = 1
+),
+
+FilteredRecords AS (
+    SELECT I.*, C1.*, C2.*
+    FROM Insurance I LEFT JOIN CTE_Duplicate_tiv_2015 C1 
+    ON I.tiv_2015 = C1.dup
+    LEFT JOIN CTE_UNIQUE_LAT_LAN C2
+    ON I.lat = C2.U_lat AND I.lon = C2.U_lon
+    WHERE dup IS NOT NULL 
+    AND U_lat IS NOT NULL
+    AND U_lon IS NOT NULL
+
+)
+
+SELECT ROUND(SUM(tiv_2016),2) as tiv_2016
+FROM FilteredRecords;
+```
+
+
+*---------------------------------------------------*
+
+
+###  43. Department Top Three Salaries
+[Click here to see question](
+https://leetcode.com/problems/department-top-three-salaries/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE_Duplicate_tiv_2015 AS(
+    SELECT tiv_2015 as dup
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(pid) > 1
+),
+
+CTE_UNIQUE_LAT_LAN AS(
+    SELECT lat as U_lat, lon as U_lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(PID) = 1
+),
+
+FilteredRecords AS (
+    SELECT I.*, C1.*, C2.*
+    FROM Insurance I LEFT JOIN CTE_Duplicate_tiv_2015 C1 
+    ON I.tiv_2015 = C1.dup
+    LEFT JOIN CTE_UNIQUE_LAT_LAN C2
+    ON I.lat = C2.U_lat AND I.lon = C2.U_lon
+    WHERE dup IS NOT NULL 
+    AND U_lat IS NOT NULL
+    AND U_lon IS NOT NULL
+
+)
+
+SELECT ROUND(SUM(tiv_2016),2) as tiv_2016
+FROM FilteredRecords;
+```
+
+
+*---------------------------------------------------*
+
+
+###  44. Fix Names in a Table
+[Click here to see question](
+https://leetcode.com/problems/fix-names-in-a-table/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT user_id, CONCAT(UPPER(SUBSTR(name,1,1)),LOWER(SUBSTR(name,2))) as name
+FROM Users
+ORDER BY user_id;
+```
+
+*---------------------------------------------------*
+
+
+###  45. Patients With a Condition
+[Click here to see question](
+https://leetcode.com/problems/patients-with-a-condition/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT *
+FROM patients
+WHERE conditions LIKE '% DIAB1%' OR conditions LIKE 'DIAB1%'
+```
+
+
+*---------------------------------------------------*
+
+
+###  46. Delete Duplicate Emails
+[Click here to see question](
+https://leetcode.com/problems/delete-duplicate-emails/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE as (
+        SELECT id
+        FROM 
+            (SELECT id, email, 
+            RANK() OVER(PARTITION BY email ORDER BY id) as RANK_
+            FROM person
+            ) Q1
+        WHERE rank_ > 1
+)
+
+DELETE FROM person WHERE id in (SELECT * FROM CTE);
+```
+
+
+
+*---------------------------------------------------*
+
+
+###  47. Second Highest Salary
+[Click here to see question](
+https://leetcode.com/problems/second-highest-salary/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT MAX(salary) as SecondHighestSalary
+FROM Employee
+WHERE SALARY < (SELECT MAX(salary) FROM Employee);
+```
+
+
+*---------------------------------------------------*
+
+
+###  48. Group Sold Products By The Date
+[Click here to see question](
+https://leetcode.com/problems/group-sold-products-by-the-date/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT sell_date, COUNT(DISTINCT product) as num_sold, GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') as products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date;
+```
+
+
+
+
+*---------------------------------------------------*
+
+
+###  49. List the Products Ordered in a Period
+
+[Click here to see question](
+https://leetcode.com/problems/list-the-products-ordered-in-a-period/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+WITH CTE as(
+    SELECT product_id, SUM(unit) as unit
+    FROM Orders
+    WHERE EXTRACT(MONTH FROM order_date) = 2 AND 
+    EXTRACT(YEAR FROM order_date) = 2020
+    GROUP BY product_id
+    HAVING SUM(unit) >= 100)
+    
+SELECT product_name, unit
+FROM CTE C LEFT JOIN Products P
+ON C.product_id = P.product_id;
+```
+
+
+*---------------------------------------------------*
+
+
+###  50. Find Users With Valid E-Mails
+
+[Click here to see question](
+https://leetcode.com/problems/find-users-with-valid-e-mails/description/?envType=study-plan-v2&envId=top-sql-50)
+
+#### Solution
+
+```sql
+SELECT * 
+FROM users
+WHERE mail REGEXP '^[a-z][a-z0-9._-]*@leetcode[.]com$';
 ```
