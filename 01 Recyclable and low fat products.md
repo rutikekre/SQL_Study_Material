@@ -1,4 +1,4 @@
-Question 1
+> Question 1
 ###  Recyclable and Low Fat Products
 
 [Click here to see question](https://leetcode.com/problems/recyclable-and-low-fat-products/?envType=study-plan-v2&envId=top-sql-50 )
