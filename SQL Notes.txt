@@ -1,0 +1,485 @@
+1. What is database ?
+A database is collection of data. which is stored in organized manner so that we can  easily access, store and manipulate data. It is stored in tables, views, schemas etc.
+
+
+2. What is SQL?
+SQL stands for structured query language and it is used to perform various operations on database using 
+DML,DDL etc. We can do many things such as creating a table, deleting table, inserting, updating and deleting data from table etc.
+
+
+3. Does SQL Support Programming features?
+SQL is a language but it is not as similar as programming language as it does not support loops, logical operation. it is a command language which let us perform operations on database.
+
+
+4. What are subsets of SQL ?
+DDL - It is use for creating structure in database. it includes commands like CREATE, ALTER, DROP, TRUNCATE, RENAME etc
+
+DML - It is used for performing operations on table such as INSERT, UPDATE, DELETE etc.
+
+DCL - Data Control Language,  it controls the access of data in the database. we can permit user to access data with GRANT command and remove access with Revoke Command.
+
+TCL - Transaction Control Language. it is used to deal with transactions in the database. it includes commands like COMMIT, ROLLBACK, SAVEPOINT  etc.
+
+
+5. What are tables?
+Table is a structural representation of data, it consist of row and column where column represents the attributes and row represents the data. a table can have fixed no. of columns but can have any no. of rows.
+
+
+6. What is primary key?
+A primary key is used to uniquely identify the row in a table. a table can have only one primary key and primary key does not allow duplicate values and null or empty values.
+
+
+7. What is foreign key?
+A foreign key is used to link one or more tables. it is also known as the reference key.
+foreign key of one table is linked to primary key of another table. it identifies the each row of another table uniquely which identifies the  referential integrity.
+
+
+8. What is unique key?
+The column which is declared as unique key can store only unique values i.e. it does not allow duplicate values to be stored.each column declared as unique key allows only one null value. we can have one or more unique key columns in one table.
+
+
+9. Primary key vs Unique key
+Primary key is used to uniquely identify the each row.
+Primary key does not allow NULL values.
+Primary key column values cannot be deleted or modified
+
+Unique key is also used to uniquely identify the each row when primary key is not present.
+Unique key allows only one NULL value in column.
+Unique key column values can be modiefied.
+
+
+10. What is Database ?
+Database is a organized collection of data that is structured into tables, rows, columns and indexes.
+It helps user to find relevent information frequently. It is a electronic system which makes data access, data storing, data manipulation, data retrival and  data management easy.
+
+
+11. What is DBMS?
+DBMS stands for Database Management System. it is a software program which act as a interface between Database and end user. It helps user to perform operations on database in no time.
+for example. MYSQL, Oracle this are the DBMS.
+
+
+12. What is RDBMS?
+RDBMS stands for Relational Database Management System. It is DBMS which is based on relational model.
+here the data is stored in the collection of tables which are linked to each other. 
+
+
+13. What is ACID properties?
+ACID - Atomicity, Consistency, Isolation, Durability
+
+Atomicity - By this, we mean that either the entire transaction takes place at once or doesn’t happen at all. There is no midway i.e. transactions do not occur partially. Each transaction is considered as one unit and either runs to completion or is not executed at all. It involves the following two operations. 
+—Abort: If a transaction aborts, changes made to the database are not visible. 
+—Commit: If a transaction commits, changes made are visible. 
+Atomicity is also known as the ‘All or nothing rule’. 
+
+
+Consistency:
+This means that integrity constraints must be maintained so that the database is consistent before and after the transaction. It refers to the correctness of a database. 
+
+
+Isolation :
+This property ensures that multiple transactions can occur concurrently without leading to the inconsistency of the database state. Transactions occur independently without interference. Changes occurring in a particular transaction will not be visible to any other transaction until that particular change in that transaction is written to memory or has been committed. This property ensures that the execution of transactions concurrently will result in a state that is equivalent to a state achieved these were executed serially in some order.
+
+
+Durability :
+This property ensures that once the transaction has completed execution, the updates and modifications to the database are stored in and written to disk and they persist even if a system failure occurs. These updates now become permanent and are stored in non-volatile memory. The effects of the
+
+
+
+14. Operators in SQL
+Arithmetic Operators :- +,-,*,/,%
+Logical operators :- AND,OR,IS NULL,IS NOT NULL,BETWEEN, IN, LIKE, NOT LIKE, UNIQUE
+Comparison Operator :- =,<>,<=,>=,<,>
+
+String :- 
+	% => zero or more characters
+	_ => single character, [] => any character specified within 
+	[^] => no character specified within
+
+
+
+15. View
+ A view is a virtual table which is contains subset of data within a table. It looks like actual data but it takes less space because it is not present physically. a view can have data from one or more table. if any changes happen to table it will also reflect in virtual table. the name should be unique.
+
+it only reflects the data that was declared when view created.
+CREATE VIEW view_name AS
+(select * from table_name);
+	
+** VIEW vs MATERALIZE VIEW
+View does not occupy space in physical memory
+it is slower for query
+it reflects the changes made in base table automatically
+
+
+Materalize View - 
+it occupy space in physical memory
+it is faster for query
+we have to manually update the changes here using triggers.
+
+
+
+16. SQL vs PL/SQL
+SQL is a single query used to perform DDL and DML operations.
+It is declarative defines what must be done rather than how must be done.
+executed as a single statement
+cannot contain plsql code
+
+
+PLSQL is block of code to write procedures,functions,program blocks etc.
+It is procedural defines how things must be done.
+execute as whole block
+can contain PLSQL code.
+
+
+17. SQL query to show current date;
+SELECT sysdate() from emp;
+
+
+18. Types of Joins:
+a. Inner Join  - It returns only matching rows from both the table
+b. Left Join - It returns all the rows from left table and matching rows from right table.
+c. right join - It returns all the rows from right table and matching rows from left table.
+d. full join - It returns all the rows from both the table. even if the condition does not match
+
+
+
+19. Self Join :
+joining a table with itself.
+
+ex. SELECT * 
+FROM table1,table2 
+WHERE table1.mgr = table2.eno;
+
+
+
+20. SET operators in SQL.
+UNION - it combines result from two diffrent tables and combine them into single output. It will remove duplicate rows by default. two table should have same no. of columns along with same datatype to perform union;
+
+ex.SELECT columns FROM table1    
+UNION    
+SELECT columns FROM table2;    
+
+
+UNION ALL - It is similar to union operator but it does not remove duplicate columns.
+
+INTERSECT - It returns only the matching rows from both the table, which is unique and will return output in ascending order.
+
+MINUS - It return the records from first query which is not found in second query.it does not return duplicate
+
+
+21. IN vs BETWEEN
+for IN we have to give tuple or comma seperated list
+for example.
+SELECT * FROM table1 
+WHERE name IN ('name1','name2');
+
+for BETWEEN we have to give range using AND operator;
+for example.
+SELECT * FROM table1
+WHERE sal BETWEEN 1000 AND 20000;
+
+
+22. DELETE vs TRUNCATE
+Delete is considered as DML command
+we can rollback the delete operation.
+we can delete one or all the rows in table using delete by applying condition
+we can use where clause
+
+
+Truncate is considered as DDL command. 
+we cannot rollback the truncate operation.
+truncate removes all the rows from table at a time.
+we cannot use where clause
+
+
+23. RANK() vs DENSE_RANK()
+rank() - If the two rows are assigned the same rank, then the next number in the ranking will be its previous rank plus a number of duplicate numbers.
+
+
+dense_rank() - It always specifies ranking in consecutive order. If the two rows are assigned the same rank, this function will assign it with the same rank, and the next rank being the next sequential number.
+
+
+24. Aggregate Functions in SQL -
+MAX() - gives maximum value from column
+MIN() - gives minimum value from column
+AVG() - calculates avg value of column
+SUM() - adds all the values from column
+COUNT() - count number of elements in column
+FIRST() - it returns the first value of an expression
+LAST() - it returns the Last value of an expression
+
+
+25. WHERE vs HAVING ?
+WHERE -it does not work with aggregate functions
+it can be used without group by statement
+it can be used with select,insert,update,delete
+
+
+HAVING - it works with aggregate function
+it can be used only with group by statement
+it can be only used with select.
+
+
+
+26. Character Mannipulation Functions - 
+1. LENGTH (str) - returns length of string
+2. SUBSTR(str,startposition,charcount) - it will return charcount length of string characters from 'startposition' of str.
+	ex. ('hello world',3,4) - (llo ) 
+3. CONCAT(str1,str2) - it concates str1 with str2 
+4. SUBSTR() - 
+5. INSTR(str,strtocheck) - returns index number of strtocheck in str
+6. LPAD('hello',7,'*') - it will complete seven letters and add '*' from left side ('**hell') 
+7. RPAD('hello',7,'*') - it will complete seven letters and add '*' from right side ('hell**') 
+8. TRIM(str) - it will remove spaces from both left and right side of str. 
+9. REPLACE('It is the best coffee at the famous coffee shop.', 'coffee', 'tea') - it will replace word 'coffee' from given string to 'tea'
+10.LOWER(str) - returns string to lower case 
+11.UPPER(str) - returns string to upper case
+12.INITCAP(str) - returns each word's first letter capital
+
+
+
+27. What is stored procedure?
+STORED PROCEDURE is a SQL code that you can save so that you can use it again and again.
+it works like function and can also take parameters.
+it reusable
+
+a. Normal Stored procedure
+CREATE PROCEDURE procedure_name
+AS (sql_statement)
+GO;
+
+b. Parameterize
+CREATE PROCEDURE p1 @city varchar(20)
+AS (select * from table where city = @city)
+GO;
+
+c. Multiple Parameteres
+CREATE PROCEDURE p1 @city varchar(20), @pin varchar(20)
+AS (select * from table where city = @city and pin = @pin)
+GO;
+
+Executing Stored Procedure -  EXEC p1 @city='MUMBAI',@pin='400708';
+
+
+
+28. ALTERNATE KEY
+Any key other than primary is considered as alternate key. it is also called as secondary key
+for example. in student table roll no. is primary key but name, surname, class can be treated as alternate key
+
+
+29. COMPOSITE KEY
+two or more columns requred to identify row uniquely then it is composite key.
+
+ex. combination of name,surname and mobileno.
+for ex. ALTER TABLE table_name ADD COMPOSITE_KEY(col1,col2)
+
+
+30. Trigger
+It is a special type of stored procedure that is invoked automatically in response to an event. It allows us to execute a batch of code when an insert, update or delete command is run against a specific table because the trigger is the set of activated actions whenever DML commands are given to the system.
+
+
+Ex. CREATE TRIGGER trigger_name
+	{AFTER |  BEFORE} {INSERT|UPDATE|DELETE}
+	ON table_name FOR EACH ROW
+	BEGIN
+		--VARIABLE DECLARATION
+		--TRIGGER CODE
+	END;	
+
+
+
+31. Index -
+The Index in SQL is a special table used to speed up the searching of the data in the database tables. It also retrieves a vast amount of data from the tables frequently. The INDEX requires its own space in the hard disk.
+
+
+
+32. Constraints - 
+used to specify rules for the data in a table. Constraints are used to limit the type of data that can go into a table. This ensures the accuracy and reliability of the data in the table. If there is any violation between the constraint and the data action, the action is aborted.
+
+Some of the most commonly used constraints are NOT NULL, PRIMARY KEY, FOREIGN KEY, AUTO_INCREMENT, UNIQUE KEY, etc.
+
+
+
+33. WITH CTE
+WITH keyword is used to allocate temporary memory 
+CTE - Common Table Expression view(virtual table) it is used to create view of the query that can be used to simpplify query.
+
+WITH
+  cteReports (EmpID, FirstName, LastName, MgrID, EmpLevel)
+  AS
+  (
+    SELECT EmployeeID, FirstName, LastName, ManagerID, 1
+    FROM Employees
+    WHERE ManagerID IS NULL
+	)
+
+
+34. What is Cursor
+The cursor is a Temporary Memory or Temporary Work Station. It is Allocated by Database Server at the Time of Performing DML operations on the Table by the User. Cursors are used to store Database Tables. 
+
+
+
+35. COMMIT vs ROLLBACK
+Commit permanently saves the changes that are made by current operation
+transaction cannot undo after commit  	
+when transaction is success, commit is apllied
+
+
+Rollback undo the changes made by current transaction
+transaction  reaches its previous 
+when transaction is failed rollback is applied.
+
+
+
+
+36. Datawarehouse
+datawarehouse is centralized data storage system in a Organization where data from various sources is stored.
+datawarehouse 2 types of data
+OLTP (Online Transaction Processing) - 
+Data which is in day to day use is stored in OLTP
+it is highly nortmalizaed 
+faster as compare to OLAP
+raw data is stored
+ex. banking system
+
+
+OLAP (Online Analytical Processing) - 
+Historical Data is stored here
+data oltp comes here
+it is denormalized
+slower as compare to OLTP
+used for analytical and reporting perpose
+
+
+
+37. Datamarts
+Datamarts are nothing but subset of datawarehouse which focuses on specific department in the organization.
+
+
+38. What is Snowflake
+Snowflake is a SaaS based dataware house system which build upon AWS, MS Azure and GCP link cloud platforms
+it is used for various business intelligence operations.
+
+
+39. Snowflake Architecture :
+it consist of 
+Shared-disk database architecture 
+Shared-nothing database architecture,
+
+
+
+40. what is clustur
+clusture is nothing but grouping of similar rows in the table for high query performance
+
+
+
+
+**********************************************************************
+SNOWFLAKE
+**********************************************************************
+
+1. Stages in Snowflake
+
+Staging Area is between ODS and DWH
+here data validation and cleansing is done
+A stage specifies where data files are stored (i.e. “staged”) so that the data in the files can be loaded into a table.
+
+by default internal stage is allocated to table or user
+
+
+
+a. Internal stage
+	stores data files internally inside snowflake, internal stages can be temporary or permanent.
+
+	User Stage @~ - Each user has snowflake staging area allocated by default to them where they can store the files
+			it is usefull when files are going to only accesible to single user.	
+			it cannot be altered or drop unlike name stages
+
+	Table Stage @% - Each table has snowflakje stage allocated to it by default
+			it is usefull when files are being accessed by multiple users.
+			it does not allow drop and alter  
+	
+
+	Internal Name Stage @ - Users with the appropriate privileges on the stage can load data into any table. 
+				ownership can be transfered to another role, privilages cal also be modified.
+				it allows drop and alter.
+
+
+
+
+
+b. External Stage
+	AWS,AZURE,GCP
+
+
+
+2. Clonning table
+Cloning is creating exact copy of table or schema or data
+
+create table clonetable_name clone original table.
+
+
+
+
+
+--Creating user Stage
+create stage @~dbname.schemaname.stagename;
+
+--Loading data in stage
+put file//path @~ userstage @~dbname.schemaname.stagename;
+
+-- loading stage to table
+copy into dbname.schemaname.tblname from @~dbname.schemaname.stagename FILE_FORMAT = 'LTI_SFDB.LTI_SFSCHEMA.LTI_TXT_FF' ON_ERROR = 'CONTINUE' PURGE = FALSE;
+
+
+-- Unloading data
+--create unload stage
+create stage @~dbname.schemaname.unloadstagename;
+
+
+copy into @~dbname.schemaname.unloadstagename from dbname.schemaname;
+
+get @LTI_UNLOAD_STG/data_0_0_0.csv.gz file://C:\Users\DKSAI\OneDrive\Desktop\SRC_FILES;
+
+
+REMOVE @LTI_UNLOAD_STG PATTERN='.*.csv.gz';
+
+
+
+
+
+
+
+
+insert into table
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+

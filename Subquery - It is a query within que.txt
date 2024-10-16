@@ -1,0 +1,25 @@
+Subquery - It is a query within query. which is generally enclosed under paranthesis and written with where clause.
+
+
+co-related queries -  a subquery that refers to a column of a table that is not in its FROM clause
+
+
+Joins - Join are used to join to tables using keys(ex. Foreign key to Primary key). 
+
+
+types of joins - Inner, Full Outer, Left Outer, Right Outer, Self join, Equi Join, Cross Join.
+
+
+
+
+Single Row Function - It returns value for each row (ex, SUBSTR(),LENGTH())
+
+Multi Row Function - It returns Value for group of rows (ex. Max(),Min())
+
+
+In Join common field is required
+but in subuery no neewd to have common field
+
+
+Joins are used to join multiple tables
+subquery is used for filteration

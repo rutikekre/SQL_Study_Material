@@ -1,0 +1,261 @@
+-- CREATING EMPLOYEEINFO TABLE
+
+CREATE TABLE employeeInfo
+(
+    empID number,
+    empFname varchar2(20),
+    empLname varchar2(20),
+    department varchar2(20),
+    project varchar2(20),
+    address varchar2(20),
+    dob date,
+    gender char(1)
+);
+
+
+-- CREATING EMPLOYEEPOSITION TABLE
+CREATE TABLE employeePosition
+(
+	empID number,
+    empPosition varchar2(20),
+    dateOfJoining date,
+    salary number
+);
+
+
+-- CREATING DEPENDENCIES
+ALTER TABLE employeeInfo
+ADD CONSTRAINTS PK PRIMARY KEY(EMPID);
+
+ALTER TABLE employeePosition
+ADD CONSTRAINTS FK FOREIGN KEY(EmpID) REFERENCES EMPLOYEEINFO(EmpID);
+
+
+-- INSERTING DATA
+
+INSERT INTO EMPLOYEEiNFO VALUES(1,'Sanjay','Mehra','HR','P1','Hyderabad(HYD)',to_date('01/12/1976','dd-mm-yyyy'),'M');
+INSERT INTO EMPLOYEEiNFO VALUES(2,'Ananya','Mishra','Admin','P2','Delhi(DEL)',to_date('02/05/1968','dd-mm-yyyy'),'F');
+INSERT INTO EMPLOYEEiNFO VALUES(3,'Rohan','Diwan','Account','P3','Mumbai(BOM)',to_date('01/01/1980','dd-mm-yyyy'),'M');
+INSERT INTO EMPLOYEEiNFO VALUES(4,'Sonia','Kulkarni','HR','P4','Hyderabad(HYD)',to_date('02/05/1992','dd-mm-yyyy'),'F');
+INSERT INTO EMPLOYEEiNFO VALUES(5,'Ankit','Kapoor','Admin','P5','Delhi(DEL)',to_date('03/07/1994','dd-mm-yyyy'),'M');
+
+
+INSERT INTO EMPLOYEEPOSITION VALUES(1,'Manager',to_date('01/05/2022','dd-mm-yyyy'),500000);
+INSERT INTO EMPLOYEEPOSITION VALUES(2,'Executive',to_date('02/05/2022','dd-mm-yyyy'),75000);
+INSERT INTO EMPLOYEEPOSITION VALUES(3,'Manager',to_date('01/05/2022','dd-mm-yyyy'),90000);
+INSERT INTO EMPLOYEEPOSITION VALUES(2,'Lead',to_date('02/05/2022','dd-mm-yyyy'),85000);
+INSERT INTO EMPLOYEEPOSITION VALUES(1,'Executive',to_date('01/05/2022','dd-mm-yyyy'),300000);
+
+
+commit;
+
+
+
+-- Q1 Write a query to fetch the EmpFname from the EmployeeInfo table in the upper case and use the ALIAS name as EmpName.
+
+
+SELECT UPPER(empFName) as EmpName
+FROM employeeInfo;
+
+
+-- Q2 Write a query to fetch the number of employees working in the department ‘HR’.
+SELECT COUNT(EMPID)
+FROM EMPLOYEEINFO
+WHERE DEPARTMENT = 'HR';
+
+
+-- Q3
+SELECT SYSDATE FROM DUAL;
+
+-- Q4 •	Write a query to retrieve the first four characters of  EmpLname from the EmployeeInfo table.
+SELECT SUBSTR(EMPLNAME,1,4)
+FROM EMPLOYEEINFO;
+
+-- Q5 Write a query to fetch only the place name(string before brackets) from the Address column of EmployeeInfo table.
+SELECT SUBSTR(ADDRESS,1,INSTR(ADDRESS,'(',1)-1) AS PLACE
+FROM EMPLOYEEINFO;
+
+
+-- Q6 Write a query to create a new table that consists of data and structure copied from the other table.
+CREATE TABLE TEMP AS (SELECT * FROM EMPLOYEEINFO);
+
+
+-- Q7 Write q query to find all the employees whose salary is between 50000 to 100000.
+
+SELECT * FROM EMPLOYEEINFO E LEFT JOIN EMPLOYEEPOSITION P
+ON E.EMPID = P.EMPID
+WHERE SALARY BETWEEN 50000 AND 100000;
+
+-- Q8 Write a query to find the names of employees that begin with ‘S’
+SELECT * FROM EMPLOYEEINFO
+WHERE EMPFNAME LIKE 'S%';
+
+
+-- Q9 Write a query to fetch top N records.
+SELECT * FROM EMPLOYEEINFO
+WHERE ROWNUM < 5;
+
+-- Q10 Write a query to retrieve the EmpFname and EmpLname in a single column as “FullName”. The first name and the last name must be separated with space.
+SELECT CONCAT(EMPFNAME,CONCAT(' ',EMPLNAME)) AS FULLNAME
+FROM EMPLOYEEINFO;
+
+
+-- Q11 Write a query find number of employees whose DOB is between 02/05/1970 to 31/12/1975 and are grouped according to gender
+SELECT GENDER,COUNT(EMPID) 
+FROM EMPLOYEEINFO
+WHERE DOB BETWEEN TO_DATE('02/05/1970','DD-MM-YYYY') AND TO_DATE('31/05/1975','DD-MM-YYYY')
+GROUP BY GENDER;
+
+
+-- Q12 Write a query to fetch all the records from the EmployeeInfo table ordered by EmpLname in descending order and Department in the ascending order.
+SELECT *
+FROM EMPLOYEEINFO
+ORDER BY EMPLNAME DESC, DEPARTMENT ASC;
+
+
+-- Q13 Write a query to fetch details of employees whose EmpLname ends with an alphabet ‘A’ and contains five alphabets.
+SELECT * 
+FROM EMPLOYEEINFO
+WHERE EMPLNAME LIKE '____a';
+
+-- Q14 Write a query to fetch details of all employees excluding the employees with first names, “Sanjay” and “Sonia” from the EmployeeInfo table.
+SELECT * 
+FROM EMPLOYEEINFO
+WHERE EMPFNAME NOT IN ('Sanjay','Sonia');
+
+
+-- Q15 Write a query to fetch details of employees with the address as “DELHI(DEL)”.
+SELECT * 
+FROM EMPLOYEEINFO
+WHERE ADDRESS = 'Delhi(DEL)';
+
+
+-- Q16 Write a query to fetch all employees who also hold the managerial position.
+SELECT *
+FROM EMPLOYEEINFO E NATURAL JOIN EMPLOYEEPOSITION P
+WHERE P.EMPPOSITION = 'Manager';
+
+
+-- Q17. Write a query to fetch the department-wise count of employees sorted by department’s count in ascending order.
+SELECT DEPARTMENT,COUNT(EMPID) AS EMP_CNT
+FROM EMPLOYEEINFO
+GROUP BY DEPARTMENT
+ORDER BY EMP_CNT;
+
+
+-- Q18 Write a query to calculate the even and odd records from a table.
+WITH CTE AS (SELECT (CASE WHEN MOD(EMPID,2)=0 THEN 1 ELSE 0 END) AS EVEN, (CASE WHEN MOD(EMPID,2)=1 THEN 1 ELSE 0 END) AS ODD 
+FROM EMPLOYEEINFO)
+    
+SELECT SUM(EVEN) AS EVEN, SUM(ODD) AS ODD
+FROM CTE;
+
+
+
+-- Q19. Write a SQL query to retrieve employee details from EmployeeInfo table who have a date of joining in the EmployeePosition table.
+SELECT DISTINCT *
+FROM EMPLOYEEINFO E JOIN EMPLOYEEPOSITION P
+ON E.EMPID = P.EMPID
+WHERE P.DATEOFJOINING IS NOT NULL;
+
+-- OR
+SELECT * FROM EmployeeInfo E 
+WHERE EXISTS 
+(SELECT * FROM EmployeePosition P WHERE E.EmpId = P.EmpId);
+
+
+
+-- Q20 Write a query to retrieve two minimum and maximum salaries from the EmployeePosition table.
+SELECT DISTINCT SALARY 
+FROM EMPLOYEEPOSITION
+WHERE ROWNUM IN (1,2)
+ORDER BY SALARY DESC;
+
+SELECT DISTINCT SALARY 
+FROM EMPLOYEEPOSITION
+WHERE ROWNUM IN (1,2)
+ORDER BY SALARY ASC;
+
+
+
+
+
+ -- Q21. Write a query to find the Nth highest salary from the table without using TOP/limit keyword.
+
+
+--  Q22. Write a query to retrieve duplicate records from a table.
+WITH CTE AS (SELECT E.*, RANK() OVER(PARTITION BY EMPID,EMPFNAME,EMPLNAME,DEPARTMENT,PROJECT,ADDRESS,DOB,GENDER ORDER BY ROWNUM) AS RN 
+FROM EMPLOYEEINFO E)
+
+SELECT * 
+FROM CTE
+WHERE RN > 1;
+    
+
+-- OR
+SELECT EmpID, EmpFname, Department COUNT(*) 
+FROM EmployeeInfo GROUP BY EmpID, EmpFname, Department 
+HAVING COUNT(*) > 1;
+
+
+-- Q23. Write a query to retrieve the list of employees working in the same department.
+SELECT DISTINCT E1.EMPID, E1.EMPFNAME, E1.DEPARTMENT
+FROM EMPLOYEEINFO E1, EMPLOYEEINFO E2
+WHERE E1.DEPARTMENT = E2.DEPARTMENT AND E1.EMPID <> E2.EMPID;
+
+
+-- Q24. Write a query to retrieve the last 3 records from the EmployeeInfo table.
+SELECT * 
+FROM EMPLOYEEINFO
+WHERE ROWNUM <= 3
+ORDER BY EMPID DESC;
+
+
+
+-- Q25. Write a query to find the third-highest salary from the EmpPosition table.
+WITH CTE AS (SELECT P.*, DENSE_RANK() OVER(ORDER BY SALARY) AS RN
+FROM EMPLOYEEPOSITION P)
+    
+SELECT SALARY FROM CTE WHERE RN=3;
+
+
+-- Q26. Write a query to display the first and the last record from the EmployeeInfo table.
+SELECT *  
+FROM EMPLOYEEINFO 
+WHERE EMPID = (SELECT MIN(EMPID) FROM EMPLOYEEINFO);
+
+SELECT *  
+FROM EMPLOYEEINFO 
+WHERE EMPID = (SELECT MAX(EMPID) FROM EMPLOYEEINFO);
+
+
+
+-- Q28. Write a query to retrieve Departments who have less than 2 employees working in it.
+SELECT DEPARTMENT, COUNT(EMPID)
+FROM EMPLOYEEINFO
+GROUP BY DEPARTMENT
+HAVING COUNT(EMPID) < 2;
+
+
+-- Q29. Write a query to retrieve EmpPostion along with total salaries paid for each of them.
+SELECT EMPPOSITION,SUM(SALARY)
+FROM EMPLOYEEPOSITION
+GROUP BY EMPPOSITION;
+
+
+
+-- Q30. Write a query to fetch 50% records from the EmployeeInfo table.
+
+SELECT *
+FROM EMPLOYEEINFO
+WHERE ROWNUM <= CEIL((SELECT COUNT(*) FROM EMPLOYEEINFO)/2);
+
+
+
+
+
+DESC EMPLOYEEINFO;
+
+DESC EMPLOYEEPOSITION;
+
+

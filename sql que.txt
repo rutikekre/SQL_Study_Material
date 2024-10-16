@@ -1,0 +1,19 @@
+
+
+WAQ to display all the employee’s full name in the Ascending order.
+WAQ to display the employees whose last name contains the “war”
+WAQ to display all product name and price , which available Qty (stock in hand ) is ZERO.
+
+
+WAQ display Each Job title and its employee count .
+WAQ to display total employee count .
+WAQ to display Each product line id and its product count.
+WAQ to display  FUll Name of the customer who have not yet placed any orders.
+WAQ to display full name of the CUSTOmer who have placed the orders.
+
+
+WAQ to display name of the customer and thier ordered QTy who all are ordered the product name Honda Bike
+
+
+
+

@@ -1,0 +1,1134 @@
+]1. Open CMD > sqlplus >
+
+2. We have to run this command to get output on SQL*PLUS
+	SET SERVEROUTPUT ON;
+
+
+--------------------------------------------------------------------------------------------------------------------
+Basic Syntax
+--------------------------------------------------------------------------------------------------------------------
+DECLARE
+	<variable declaration>;
+	
+BEGIN
+	<operations>;
+
+END;
+/
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Declaring Variable
+--------------------------------------------------------------------------------------------------------------------
+
+1. We have to use DECLARE statement to declare variables.
+
+2. Syntax: z
+	a. Declaring variable:
+	DECLARE
+	  variable_name datatype(size);
+
+
+	b. Assigning value to variable
+	DECLARE
+		variable_name datatype(size) := value;
+
+
+	C. Creating constant variable
+	DECLARE
+		variable_name CONSTANT datatype(size) := value;
+
+	
+	NOTE:- 	Constant variable's value cannot be changed/ will not change.
+		We have to provide value to constant variable at the time of declaration.
+		If we dont provide value to constant variable it will raise compilation error.
+		We cannot assign NULL value to constant variable.
+		
+3. Example :-
+
+	DECLARE
+		id number;
+		name  varchar2(20) := 'Rutik';
+		country CONSTANT varchar2(20) := 'INDIA';
+
+
+NOTE:-
+	a. Variable names can contain _,$ and alphanumeric values.
+	b. Variables are not case sensitive (i.e.   var_name   and VAR_NAME  are same).
+	c. We can also assign default value to variable
+		Ex. 1. counter binary_integer := 0; 
+             	    2. greetings varchar2(20) DEFAULT 'Have a Good Day';
+	d. By default the default value of non-constant variable is NULL.
+	e. We have to put semicolon after each variable declaration
+	
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+EXECUTABLE COMMANDS
+--------------------------------------------------------------------------------------------------------------------
+1. Executable commands are written inside BEGIN & END BLOCK
+2. Syntax :-
+	BEGIN
+		<database operations>;
+	END;
+	/
+
+3. We have to put / (forward slash) after end of the program. / tells compiler to run the procedure).
+
+4. Example;
+	DECLARE 
+		name varchar2(20) := 'Rutik'
+	BEGIN
+		
+		dbms_output.put_line('Name' || name);	
+	
+	END;
+	/ 
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Data types
+--------------------------------------------------------------------------------------------------------------------
+
+1. Some of the commonly used datatypes;
+	Number(prec,scale)
+	Varchar
+	Boolean
+	Datetime	
+	
+
+2. User Defined subtypes
+	Syntax :- 
+		SUBTYPE varname IS datatype(size);
+	
+	Example :-
+		SUBTYPE	name IS varchar2(20);
+	
+
+3. In above example we have created a sub-datatype, which can be used to declare variables
+	Example:- 
+		Fname name;
+		Lname name;
+
+	It will allocate varchar2 datatype of size 20 to Fname and Lname variables.
+
+
+NOTE:-	Precision :- Total number of digits in number including both left side numbers and right side numbers of decimal point. 
+	(Example - 12.345  prec will be 5)
+	
+	Scale :- Number of digits on right side of decimal point.
+	(Example - 12.345  Scale will be 3)
+	
+
+
+4. NULL 
+	NULL values represent missing or unknown data and they are not an integer, a character, or any other specific data type.
+	NULL and empty values are diffrent.
+	NULL can be Compared to NULL only).
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Operators
+--------------------------------------------------------------------------------------------------------------------
+
+1. Arithmetic operators
+	+.-,*,/, ** (** is exponential operator a**b   a to power b  3**2 = 9)
+
+
+2. Relational operators
+	=,(<>, !=, ~=), <,>,<=,>=,
+	
+3. Comparison operators
+	LIKE, BETWEEN, IN, IS NULL
+
+4. Logical operators
+	AND, OR, NOT
+	
+5. String operators
+	
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Conditional statement
+--------------------------------------------------------------------------------------------------------------------
+
+
+1. IF - THEN
+	Syntax :- 
+		IF <condition>
+		THEN 
+			<statement to execute if cond. is true>
+		END	
+
+
+
+2. IF - THEN - ELSE
+	Syntax :- 
+		IF <condition>
+		THEN 
+			<statement to execute if cond. is true>
+		
+		ELSE
+			<statement to execute if cond. is false>
+
+		END	
+
+
+
+3. IF - THEN - ELSIF - ELSE
+	Syntax :- 
+		IF <condition 1>
+		THEN 
+			<statement to execute if cond. 2 is true>		
+		
+		ELSIF <condition 2>
+		THEN 
+			<statement to execute if cond. 2 is true>
+		
+		ELSE
+			<statement to execute if BOTH cond. are false>
+
+		END	
+
+
+
+Example :- 
+  1  DECLARE
+  2     a number := 19;
+  3  BEGIN
+  4     IF (a=10)
+  5     THEN
+  6         dbms_output.put_line('if executed');
+  7     ELSIF (a <> 19)
+  8     THEN
+  9         dbms_output.put_line('elsif executed');
+ 10     ELSE
+ 11         dbms_output.put_line('else executed');
+ 12     END IF;
+ 13  END;
+ 14  /
+
+OUTPUT :- else executed
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+CASE 
+--------------------------------------------------------------------------------------------------------------------
+
+NOTE:- It is like Switch case.
+
+Syntax :-
+	variable_name
+
+	CASE <expression>
+		WHEN 'VALUE1' 
+		THEN <OPERATION>
+		
+		WHEN 'VALUE2' 
+		THEN <OPERATION>
+		
+		WHEN 'VALUE3' 
+		THEN <OPERATION>
+		
+		ELSE <OPERATION>
+	END CASE;
+	
+
+ 
+
+Example :- 
+ 1  DECLARE
+ 2     a number := 19;
+ 3  BEGIN
+ 4     CASE a
+ 5		WHEN 19 THEN dbms_output.put_line('VALUE IS 19 1');
+ 6		WHEN 10 THEN dbms_output.put_line('VALUE IS 10');
+ 7     		WHEN 19 THEN dbms_output.put_line('VALUE IS 19 2');
+ 8     		ELSE dbms_output.put_line('ELSE EXECUTED');
+ 9     END CASE;
+10  END;
+11  /
+
+	
+OUTPUT :- VALUE IS 19 1
+
+
+NOTE:- When the condition is satisfied all other conditions will be ignored. It is like puting break statement in case (used in c & JAVA).
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+LOOPS IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+
+1. BASIC LOOP
+
+Syntax :- 
+	-------------------------------------
+	a.	LOOP 
+
+			<statements>
+		
+		END LOOP;
+
+	NOTE :- THIS WILL BE A INFINE LOOP AND WE NEED TO SPECIFY LOOP BREAK CONDITION HERE
+
+
+	Example :- 
+		BEGIN
+			LOOP
+				dbms_output.put_line('HELLO');
+			END LOOP;
+		END;
+    		/
+	-------------------------------------
+	b.	LOOP
+
+			<statements>;
+			EXIT WHEN <condition>;   (We can also use only EXIT statement which will break loop after first execution>)
+
+		END LOOP; 
+
+	Example :- 
+ 
+  1	 	DECLARE
+  2                     a number := 0;
+  3             BEGIN
+  4                     LOOP
+  5                             EXIT WHEN a=5;
+  6
+  7                             a := a+1;
+  8                             dbms_output.put_line('HELLO');
+  9                     END LOOP;
+ 10             END;
+ 11             /
+
+	OUTPUT :- HELLO
+		  HELLO
+	   	  HELLO
+		  HELLO
+		  HELLO
+
+	-------------------------------------
+
+
+
+2. WHILE LOOP
+	Syntax :-
+	BEGIN
+		WHILE (CONDITION) LOOP
+			<statements>;
+			<increment>;
+		END LOOP;
+	END;
+
+
+	Example :- 
+  	1  declare
+  	2  	a number := 0;
+  	3  begin
+  	4  	while (a<5) loop
+  	5  		dbms_output.put_line('hello ' || a);
+	6  		a := a+1;
+  	7  	end loop;
+  	8  end;
+  	9  /
+
+
+Output :-
+	hello 0
+	hello 1
+	hello 2
+	hello 3
+	hello 4
+		
+				
+
+
+3. FOR LOOP :- 
+
+	a. Forward Loop
+ 
+	BEGIN
+		<< OUTER_LOOP >>
+		FOR i IN start_val..end_val LOOP
+			<< INNER LOOP >>
+			FOR j IN start_val..end_val LOOP
+				<statements>;
+			END LOOP INNER_LOOP;
+		END LOOP OUTER_LOOP;
+	END;
+
+
+	NOTE: WE DONT HAVE OPTION TO USE IT AS INCREMENTAL LOOP BY USER DEFINED INCREMENT
+	 BUT WE CAN ADD (IF MOD(I,4) = 0  THEN CONTINUE ) STATEMENT INSIDE 	LOOP TO INCREMENT BY 4 AND 	SO ON. 
+
+
+
+	B. Reverse Loop
+	Syntax :-
+		BEGIN
+			FOR i IN REVERSE start_val..end_val LOOP 
+				<statements>;
+			END LOOP;
+		END;
+
+	Example :- 
+	        1  begin
+  		2  	for i in reverse 1..5 loop
+  		3    		dbms_output.put_line(i);
+  		4  	end loop;
+  		5  end;
+  		6  /
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+LOOP CONTROL STATEMENTS IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+
+
+1. EXIT - It is used to exit the loop and control passes to statement immedietly after loop.
+
+
+
+2. CONTINUE - It is used to skip the current iteration and control passes to next iteration.
+
+
+
+3. GOTO - It is used to transfer the control to labelled area and it is not advised to use in your program.
+	Syntax :- 
+
+		BEGIN 
+			<< LABEL NAME >>
+				<statements>;
+
+			GOTO label_name;
+		END;	
+
+NOTE :- For GOTO we have to create lable using << label_name >>.
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+PROCEDURES IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+
+1. Function VS Procedure :
+
+	Function :- This is subprogram which return single value and mainly used to compute and return value.
+
+	Procedures :- This is subprogram which is used to perform some task and does not return a value directly.
+
+
+2. Procedure :- 
+	1. Procedure is a block of code which is used to perform one or more tasks. 
+	
+	2. Procedure contains header & body :- 
+		Header :- Header contains procedure name, parameters or variables passed to procedure. 
+		
+		Body :- Body contains a declaration section, execution section and exception section similar to general PL/SQL block.
+
+
+3. Creating Procedure :- 
+	Syntax :-	
+	
+		CREATE [OR REPLACE] PROCEDURE procedure_name (parameters)
+		IS/AS
+		BEGIN
+			< executable section >
+			< exception  section >
+		END;
+	--------------------------------------------------------------------------------
+
+	Example :- 
+		a.
+		        1  CREATE OR REPLACE PROCEDURE show_op
+  			2  as
+  			3  begin
+  			4  dbms_output.put_line('hello');
+  			5  end;
+  			6  /
+	
+
+		b. 	
+ 			1  CREATE OR REPLACE PROCEDURE add_record (empno IN number,name IN varchar2,sal number)
+  			2  IS
+  			3  BEGIN
+ 			4  INSERT INTO temp VALUES(empno,name,sal);
+  			5  END;
+  			6  /
+
+			Executing :-  EXECUTE add_record(1,'Virat',1000);
+
+
+
+	--------------------------------------------------------------------------------
+
+	**** Using IN, OUT, INOUT parameters in procedure *****
+	IN - When you want to provide input to procedure
+	OUT - This variable will hold the value at the end of procedure
+	IN OUT - This variavble will be input as well as give output.
+
+
+
+
+	Syntax :- 
+		CREATE PROCEDURE proc_name (var1 IN datatype, var2 IN datatype, var3 OUT datatype, var4 IN OUT datatype)
+		IS/AS
+		BEGIN 
+			<statements>;
+		END;
+
+
+	Example :- 
+	
+	a.
+	  	1  CREATE OR REPLACE PROCEDURE PROC1(NUM IN NUMBER)
+  		2  IS
+	  	3  BEGIN
+  		4  dbms_output.put_line('The passed numbers is ' ||num);
+  		5  END;
+  		6  /
+		7  EXECUTE PROC1(12);
+
+		Output :-
+		The passed numbers is 12 
+		
+
+	--------------------------------------------------------------------------------
+
+	b.	
+		// Procedure
+		  1  CREATE OR REPLACE PROCEDURE PROC2(num_input IN NUMBER,num_output OUT NUMBER)
+		  2  AS
+		  3  BEGIN
+		  4  dbms_output.put_line(num_input);
+		  5  num_output := num_input+10;
+		  6  END;
+		  7  /
+
+		
+		// Execution
+		 1  DECLARE 
+		 2  num1 NUMBER := 10;
+  		 3  num2 NUMBER;
+  		 4  BEGIN
+  		 5  proc2(num1,num2);
+  		 6  dbms_output.put_line(num2);
+ 		 7  END;
+  		 8  /
+
+
+		Output:	10
+			20
+
+
+	Note :- 1. We cannot change value of INPUT (IN) variable inside Procedure or Function.
+		2. If you want to modify value inside procedure use OUT or IN OUT variable.
+		3. OUT variable cannot receive value into procedure through parameter it is intended to return value;
+
+	--------------------------------------------------------------------------------
+
+	c.	We can create procedure using only OUT variable.
+
+		 // Procedure
+		  1  CREATE OR REPLACE PROCEDURE PROC2(num_output OUT NUMBER)
+		  2  IS
+		  3  BEGIN
+		  4  num_output := DBMS_RANDOM.value;
+		  5  END;
+		  6  /
+
+		Procedure created.
+
+
+		// Execution
+		 1 DECLARE NUM NUMBER;
+		 2  BEGIN
+		 3  PROC2(NUM);
+ 		 4  DBMS_OUTPUT.PUT_LINE(NUM);
+ 		 5  END;
+ 		 6  /
+		
+		Output :- .22117919306940806565591125733323082611
+
+
+	--------------------------------------------------------------------------------
+
+	d. Using IN OUT variable
+	
+		//Procedure
+
+		1  CREATE OR REPLACE PROCEDURE PROC2(num_output IN OUT NUMBER)
+  		2  IS
+  		3  BEGIN
+  		4  num_output := num_output * num_output;
+  		5  END;
+  		6  /
+
+
+		// Execution
+
+		1 DECLARE
+  		2  NUM NUMBER := 4;
+  		3  BEGIN
+  		4  dbms_output.put_line(num);
+  		5  proc2(num);
+  		6  dbms_output.put_line(num);
+  		7  END;
+  		8  /
+
+		
+		Output :	4	
+				16
+
+	--------------------------------------------------------------------------------
+
+
+4. Executing / Calling Procedure :-   
+	a. 
+		EXECUTE show_op
+	
+	b.
+		BEGIN
+			PROC_NAME(PARAMETERS);
+		END;
+
+	
+
+	
+5. Deleting Procedure :-
+	Syntax :- 
+		DROP PROCEDURE procedure_name;
+
+
+	Example :- 
+		DROP PROCEDURE show_op
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+FUNCTIONS IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+
+1. Functions in PL/SQL are similar to Procedures but the main diffrence is that function must always return a value 
+	where as procedure may or may not return a value.
+
+
+#We have 2 methods to create parameterize constructor in PL/SQL.
+
+
+1. Creating PL/SQL Functions :- 
+
+
+	a. We can mention variable which has to return inside paranthesis as OUT variable. 
+
+	  1  CREATE OR REPLACE FUNCTION FUN1(num IN NUMBER, num2 OUT NUMBER)
+	  2  RETURN NUMBER
+	  3  AS
+	  4  BEGIN
+	  5  num2 := num * num;
+	  6  RETURN num2;
+	  7  END;
+	  8  /
+
+		
+	  NOTE :- In this case the variable which is being send at the time of calling will also affect 
+		  as well as the variable to which we are assigning will also affect.
+
+		Example:- 
+   			 1 DECLARE N1 NUMBER :=2;
+  			 2  N2 NUMBER := 3;
+ 			 3  N3 NUMBER := 7;
+ 			 4  BEGIN
+			 5  DBMS_OUTPUT.PUT_LINE('Old N2 :' || N2 || '  Old N3 :' || N3);
+			 6  N3 := FUN1(N1,N2);
+  			 7  DBMS_OUTPUT.PUT_LINE('Old N2 :' || N2 || '  Old N3 :' || N3);
+  			 8  END;
+ 			 9  /
+			
+			Output :- 
+ 			Old N2 :3  Old N3 :7
+ 			Old N2 :4  Old N3 :4
+
+			Note :- As N2 is being sent as a out variable it is being assigned the return value (Fun(N1,N2) N2 is OUT variable)
+				And we are storing the result in N3 (Line 6)
+				Hence both variables are changing
+
+
+
+	b. We can also declare variable after IS/AS while creating function
+	  1  CREATE OR REPLACE FUNCTION FUN1(num IN NUMBER)
+	  2  RETURN NUMBER
+	  3  AS
+	  4  num2 NUMBER := 2; // or num2 NUMBER
+	  5  BEGIN
+	  6  num2 := num * num;
+	  7  END;
+	  8  /
+
+
+
+
+2. Calling / Executing Functions :-
+
+	a.A For first example
+	  1  CREATE OR REPLACE FUNCTION FUN1(num IN NUMBER, num2 OUT NUMBER)
+	  2  RETURN NUMBER
+	  3  AS
+	  4  BEGIN
+	  5  num2 := num * num;
+	  6  RETURN num2;
+	  7  END;
+	  8  /
+
+	  Output :- 
+		Old N2 :3
+		New N2 :4
+
+
+	a.B 
+
+		NOTE :- In this case the OUT variables (N2) which is being send at the time of calling will also affect as well as 
+			the variable to which we are assigning will also affect (N3).
+
+		Example:- 
+   			 1 DECLARE N1 NUMBER :=2;
+  			 2  N2 NUMBER := 3;
+ 			 3  N3 NUMBER := 7;
+ 			 4  BEGIN
+			 5  DBMS_OUTPUT.PUT_LINE('Old N2 :' || N2 || '  Old N3 :' || N3);
+			 6  N3 := FUN1(N1,N2);
+  			 7  DBMS_OUTPUT.PUT_LINE('Old N2 :' || N2 || '  Old N3 :' || N3);
+  			 8  END;
+ 			 9  /
+			
+			Output :- 
+ 			Old N2 :3  Old N3 :7
+ 			Old N2 :4  Old N3 :4
+
+			Note :- As N2 is being sent as a out variable it is being assigned the return value (Fun(N1,N2) N2 is OUT variable)
+				And we are storing the result in N3 (Line 6)
+				Hence both variables are changing
+
+
+	a.C
+		We cannot call function like 
+			fun(par1,par2) 
+		because it returns something and we have to store this into variable.
+
+		It does not work like procedure when we provide out variable to it, along with out variable we have 
+		to capture the returned value into variable;	
+
+
+
+
+	b. For second example 
+	  1  DECLARE
+	  2  n NUMBER := 2;
+	  3  BEGIN
+	  4  dbms_output.put_line('old n :' || n);
+	  5  n := fun1(n);
+	  6  dbms_output.put_line('new n :' || n);
+	  7  END;
+	  8  /
+
+	Output :- 
+		old n :2
+		new n :4
+
+
+	
+	c. We can also return hard coded value (Like 10 (Line 5))
+		Example :-
+		// creating function
+  		1  CREATE OR REPLACE FUNCTION fun2(num IN number)
+  		2  RETURN NUMBER
+ 		3  AS
+  		4  BEGIN
+  		5  RETURN 10;
+ 		6  END;
+ 		7  /
+
+		// executing function
+		1  begin
+		2  dbms_output.put_line(fun2(2));
+		3  end;
+		4  /
+
+		Output :- 10
+
+
+
+
+3. Recursive Function :- 
+	1. The Function which calles itself is known as recursive function.
+
+	Example :- 
+	// Function for d=finding factorial using recursion
+	1 CREATE OR REPLACE FUNCTION FACT(N IN NUMBER)
+	2  RETURN NUMBER
+	3  AS
+	4  BEGIN
+  	5  IF N = 1
+  	6  THEN RETURN 1;
+  	7  ELSE RETURN N * FACT(N-1);
+  	8  END IF;
+  	9  END;
+ 	10  /
+
+	Output :- 120
+
+
+
+
+4. Drop / Delete Function :- 
+
+	Syntax :- DROP FUNCTION function_name;
+	Example :- DROP FUNCTION FUN1;
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Cursor IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+1. Oracle creates memory area known as context area for processing of SQL statements.
+   Which contains all the information needed for processing the statements.
+   For example :- No. of processed row.
+
+2. A cursor is a pointer to this context area.
+
+3. A cursor is used to referred to a program to fetch and process the rows returned by the SQL statement. 
+
+
+4. There are 2 types of cursor
+	a. Implicit Cursor
+		1. Implicit cursors are automatically created by oracle while SQL statement is executed, if you don't use explicit cursor.
+		2. These are created by default to process the statements when DML statements like INSERT, UPDATE and DELETE is executed. 
+
+
+		Oracle provides some attributes known as implicit cursor attributes to check status of DML operations.
+		Some of them are 
+
+		1. %FOUND     -  Its return value is TRUE if DML statements like INSERT, DELETE and UPDATE affect at least one row or more rows or a 
+			         SELECT INTO statement returned one or more rows. Otherwise it returns FALSE.	
+
+
+		2. %NOTFOUND  - Its return value is TRUE if DML statements like INSERT, DELETE and UPDATE affect no row, or a 
+				SELECT INTO statement return no rows. Otherwise it returns FALSE. It is a just opposite of %FOUND.
+
+
+		3. %ISOPEN    - It always returns FALSE for implicit cursors, because the SQL cursor is automatically closed 
+				after executing its associated SQL statements.
+
+
+		4. ROWCOUNT   - It returns the number of rows affected by DML statements like INSERT, DELETE, and UPDATE or 
+				returned by a SELECT INTO statement.
+
+
+
+		Example :- 
+			DECLARE   
+   				total_rows number(2);  
+			BEGIN  
+   				UPDATE  customers  
+  				SET salary = salary + 5000;  
+   				IF sql%notfound THEN  
+     					 dbms_output.put_line('no customers updated');  
+  				ELSIF sql%found THEN  
+      					total_rows := sql%rowcount;  
+      					dbms_output.put_line( total_rows || ' customers updated ');  
+   				END IF;   
+			END;  
+			/  
+
+
+
+
+	b. Explicit Cursor
+		Explicit Cursors are defined by the programmers to gain more control over the context area, 
+		this cursors should be defined in the declarartion area
+		It is created on a SELECT statement which returns more than one row.
+
+
+		Syntax :-
+		// Creatting explicit cursor
+		CURSOR cursor_name IS select_statement;
+
+
+		You have to do following steps :- You must follow these steps while working with an explicit cursor.
+
+			1. Declare the cursor to initialize in the memory.
+				Syntax :- CURSOR cursor_name IS select_statement;
+
+			2. Open the cursor to allocate memory.
+				Syntax :- OPEN cursor_name;
+
+			3. Fetch the cursor to retrieve data.
+				Syntax :- FETCH cursor_name INTO variable_list;
+
+
+			4. Close the cursor to release allocated memory.
+				Syntax :- CLOSE cursor_name;
+
+
+
+			Example :- DECLARE  
+   					c_id customers.id%type;  
+   					c_name customers.name%type;  
+   					c_addr customers.address%type;  
+   					CURSOR c_customers is  
+      						SELECT id, name, address FROM customers;  
+					
+				BEGIN  
+   					OPEN c_customers;  
+   					LOOP  
+      						FETCH c_customers into c_id, c_name, c_addr;  
+      						EXIT WHEN c_customers%notfound;  
+      						dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_addr);  
+   					END LOOP;  
+
+   					CLOSE c_customers;  
+
+				END;  
+				/  
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+EXCEPTION IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+
+1. An error occur at the time of execution (runtime error) is known as Exception.
+2. PL/SQL provides exception handeling to catch such errors and to perform appropriete action against the error;
+
+3. There are 2 types of exception :- 
+	a. System-defined Exception
+	b. User-defined Exception
+
+
+4. Syntax :- 
+	
+	DECLARE 
+		< declaration section >
+	
+	BEGIN
+		< executable commands >
+	
+		// if exception occurs
+
+		// Exception handeling
+	
+		WHEN exception1 THEN 
+			< exception-1 handeling statements >
+
+		WHEN exception2 THEN 
+			< exception-2 handeling statements >
+
+		WHEN exception3 THEN 
+			< exception-3 handeling statements >
+		.
+		.
+		.
+		.
+	
+		WHEN exception_n THEN 
+			< exception-n handeling statements >
+
+	END;
+
+
+5. Example :-  
+  	1  DECLARE
+  	2  empid  TEMP.empno%type;
+ 	3  empname  TEMP.ename%type;
+ 	4  begin
+ 	5  select empno,ename into empid,empname  from temp;
+  	6  dbms_output.put_line('empid : '|| empid ||'  emp name :' || empname);
+  	7  EXCEPTION
+  	8  WHEN no_data_found THEN
+  	9  dbms_output.put_line('Data not found');
+ 	10  WHEN others THEN
+ 	11  dbms_output.put_line('something went wrong');
+ 	12  END;
+ 	13  /
+
+	Output :- 
+		something went wrong
+
+
+------------------------------------------------------------------
+6. User Defined Exception / RAISE Exception
+	Syntax :- 
+		DECLARE 
+			exception_name EXCEPTION;
+
+		BEGIN
+			<executable statements>
+	
+			IF < condition > THEN
+				RAISE exception_name;
+			END IF;
+			EXCEPTION
+			WHEN exception_name THEN
+				<statements>
+		END;
+		/
+	
+
+	Example :- 
+  		1  DECLARE
+  		2  empid  TEMP.empno%type;
+  		3  exp EXCEPTION;
+
+  		4  BEGIN
+  		5  IF 10 >2 THEN RAISE exp; END IF; // it will raise error
+  		6  SELECT EMPNO INTO EMPID FROM TEMP;
+  		
+		7  EXCEPTION
+  		8  WHEN exp THEN dbms_output.put_line('user exception');
+  		9  WHEN others THEN dbms_output.put_line('other exception');
+ 		10  END;
+ 		11  /
+		
+		Output :-
+		user exception
+
+
+Note :- Both the above example (for exception and user exception example) select statements is returning more than 1 roes hence the exception is occuring and it is going to 'other exception' block
+
+
+Note :- For SELECT INTO select statement must only return one row / record;
+
+
+------------------------------------------------------------------
+7. Pre-defined Exception
+ Predefined Exception List
+	https://www.javatpoint.com/pl-sql-exception
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+TRIGGERS IN PL/SQL
+--------------------------------------------------------------------------------------------------------------------
+	
+1. Trigger is invoked by oracle engine automatically whenever specified event occurs.
+2. Trigger is stored in database and invoked repetedly, when specific condiition matche.
+
+3. Triggers are stored procedure / programs which aitomatically executed or fired when some event occurss.
+4. Triggers are written to be executed in response to any of the following events
+
+	a. DML (INSERT, UPDATE, DELETE)
+	b. DDL (CREATE, ALTER, DROP)
+	c. Data operation (SERVERERROR, LOGON, LOGOFF, STARTUP, or SHUTDOWN)
+
+5. Advantages of Trigger 
+	a. 
+	b.
+	c.
+	d.
+	e.
+	f.
+	g.
+
+
+6. Creating Trigger
+	Syntax :- 
+		CREATE OR REPLACE TRIGGER trigger_name
+		{BEFORE | AFTER | INSTED OF }
+		{INSERT [OR] | UPDATE [OR] | DELETE}
+		
+		ON table_name
+		{ FOR EACH ROW }
+		WHEN (< condition >) 
+		
+		DECLARE 
+			< declaration statements >
+		BEGIN 
+			< executable statements >
+	
+			EXCEPTION 
+				< exception statements >
+		END;
+
+
+
+	Example :- 	
+		// Creating Trigger
+  		1  CREATE OR REPLACE TRIGGER TRIG1
+  		2  AFTER INSERT OR UPDATE
+  		3  ON TEMP
+  		4  FOR EACH ROW
+  		5  WHEN (NEW.EMPNO > 100)
+  		6  BEGIN
+  		7  dbms_output.put_line('Trigger executed');
+  		8  end;
+  		9  /
+
+		// Excuting command to see if trigger works
+
+		INSERT INTO temp VALUES(101,'demo',2000,20);
+
+		Output :-
+			Trigger executed
+
+			1 row created.
+
+
+		Note :- NEW and OLD are pseudo-record name which refers to old and new record respectively.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

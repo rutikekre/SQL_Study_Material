@@ -1,0 +1,260 @@
+Joins are used join 2 tables using a joining condition.
+
+There are many joins like 
+
+1. Inner Join
+2. Left Outer Join
+3. Right Outer Join
+4. Full Outer Join
+
+
+5. Self Join
+6. Cross Join
+7. Equi Join
+8. Natural Join etc.
+
+-----------------------------------------------------------------------------------------
+1. Inner Join 
+-----------------------------------------------------------------------------------------
+
+1. It gives only matching records from both the table
+2. We have to provide joining condition with query which can be (=,<>,<,>,<=,>=)
+3. Syntax -
+	SELECT * 
+	FROM tableA JOIN tableB
+	ON tableA.dno = tableB.dno;
+
+
+
+-----------------------------------------------------------------------------------------
+2. Left Outer Join 
+-----------------------------------------------------------------------------------------
+
+1. It will return all the records from Left table and only matching records from Right table.
+2. Syntax - 
+	SELECT * 
+	FROM tableL LEFT JOIN tableR
+	ON tableL.dno = tableR.dno;
+
+3. Suppose the tables are 
+
+tableL					tableR
+---------------------			----------------------------
+eno	ename	dno			dno	dname	location
+
+1	Virat	10			10	IT	MUM
+2	Rohit	10			20	HR	HYD
+3	Hardik	20
+4	Ravi	30
+
+
+Output :- 
+-------------------------------------------------
+eno	ename	dno	dno	dname	location
+
+1	Virat	10	10	IT	MUM
+2	Rohit	10	10	IT	MUM		
+3	Hardik	20	20	HR	HYD
+4	Ravi	30	NULL	NULL	NULL
+
+ 
+a. From this example we can see that all the records from left table and matching records from right table are taken.
+b. As eno = 4 have dno = 30 which is not present in right table hence it will have null over there.
+
+
+
+-----------------------------------------------------------------------------------------
+3. Right Outer Join 
+-----------------------------------------------------------------------------------------
+
+1. It will return all the records from Right table and only matching records from Left table.
+2. Syntax - 
+	SELECT * 
+	FROM tableL RIGHT JOIN tableR
+	ON tableL.dno = tableR.dno;
+
+3. Suppose the tables are 
+
+tableL					tableR
+---------------------			----------------------------
+eno	ename	dno			dno	dname	location
+
+1	Virat	10			10	IT	MUM
+2	Rohit	10			20	HR	HYD
+3	Hardik	20			40	ACC	BLR
+4	Ravi	30
+
+
+Output :- 
+-------------------------------------------------
+eno	ename	dno	dno	dname	location
+
+1	Virat	10	10	IT	MUM
+2	Rohit	10	10	IT	MUM		
+3	Hardik	20	20	HR	HYD
+NULL	NULL	NULL	40	ACC	BLR
+
+
+a. From this example we can see that all the records from right table and matching records from left table are taken.
+b. As eno = 4 have dno = 30 which is not present in right table it will not include that row from left table.
+c. As dno=40 not available in left table it will have NULL over there.
+
+
+
+
+-----------------------------------------------------------------------------------------
+4. Full Outer Join 
+-----------------------------------------------------------------------------------------
+
+1. It will return all the records from Left and Right table.
+2. Syntax - 
+	SELECT * 
+	FROM tableL FULL OUTER JOIN tableR
+	ON tableL.dno = tableR.dno;
+
+
+3. Suppose the tables are 
+
+tableL					tableR
+---------------------			----------------------------
+eno	ename	dno			dno	dname	location
+
+1	Virat	10			10	IT	MUM
+2	Rohit	10			20	HR	HYD
+3	Hardik	20			40	ACC	BLR
+4	Ravi	30
+
+
+
+Output :- 
+-------------------------------------------------
+eno	ename	dno	dno	dname	location
+
+1	Virat	10	10	IT	MUM
+2	Rohit	10	10	IT	MUM		
+3	Hardik	20	20	HR	HYD
+4	Ravi	30	NULL	NULL	NULL
+NULL	NULL	NULL	40	ACC	BLR
+
+ 
+
+
+-----------------------------------------------------------------------------------------
+5. Self Join 
+-----------------------------------------------------------------------------------------
+
+1. Self join is joining the table with itself
+2. We can use any type of join such as (inner,left,right,full,cross)
+
+3. We can also use natural join but it is not recomended as it will create ambiguity for 
+columns name (as both the joining tables will have same names for columns.)
+
+4. Syntax - 
+	a.	SELECT * 
+		FROM tableA JOIN tableA
+		ON tableA.dno = tableB.dno
+	
+	b.	SELECT * 
+		FROM tableA LEFT JOIN tableA
+		ON tableA.dno = tableB.dno
+
+
+
+
+-----------------------------------------------------------------------------------------
+6. Equi Join 
+-----------------------------------------------------------------------------------------
+
+1. Equi join is similar to inner join but it only supports equal to (=) condition in equi join.
+2. We have to only specify to (=) condition.
+3. We can specify multiple condition using AND, OR but it should be only (=) condition.
+
+4. Syntax - 
+	a.	SELECT * 
+		FROM tableA JOIN tableB
+		ON tableA.dno = tableB.dno;	
+
+	b.	SELECT * 
+		FROM tableA JOIN tableB
+		ON tableA.dno = tableB.dno and tableA.dname = tableB.dname;
+
+	**imp
+	c.	SELECT * FROM tableA JOIN tableB using(dno);
+
+	NOTE -  a. It is used to match one columns when multiple columns are matching in table
+		b. It can be used to modify natural join to equi join.
+
+		b. Generally it is used with inner join and when used with other joins it may 
+		   not give desired output.
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+7. Cross Join 
+-----------------------------------------------------------------------------------------
+
+1. When each record of the Left Table is mapped with each record of Right Table
+   then it is cross join
+
+2. It happens when the join condition is omited or It is always TRUE.
+
+
+3. Syntax - 
+	a. SELECT * FROM tableA CROSS JOIN tableB;
+	
+	b. SELECT * FROM tableA,tableB
+	   WHERE 1>0;
+
+
+4. Example:- 
+
+
+tableL					tableR
+---------------------			----------------------------
+eno	ename	dno			dno	dname	location
+
+1	Virat	10			10	IT	MUM
+2	Rohit	10			20	HR	HYD
+3	Hardik	20			
+
+
+Output :-
+---------------------------
+eno	ename	dno	dno	dname	location
+
+1	Virat	10	10	IT	MUM
+1	Virat	10	20	HR	HYD
+2	Rohit	10	10	IT	MUM
+2	Rohit	10	20	HR	HYD
+3	Hardik	20	10	IT	MUM
+3	Hardik	20	20	HR	HYD
+
+
+
+-----------------------------------------------------------------------------------------
+8. Natural Join 
+-----------------------------------------------------------------------------------------
+
+1. Natural does not need to specify the joining condition (or matching column).
+2. It will look for matching columns by itself and perform join.
+3. If there is no matching column, it will not work.(will give error)
+4. If columns are matching but records are not matching then it gives empty result.
+
+
+Syntax :- 
+	 SELECT * 
+	 FROM table1,table2;
+
+
+Note :-  It will automatically look for matching columns and will return only matching rows.
+
+
+
+
+
+
+
+
+
