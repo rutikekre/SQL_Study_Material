@@ -1,4 +1,4 @@
-Joins are used join 2 tables using a joining condition.
+Joins are used to join 2 tables using a joining condition.
 
 There are many joins like 
 
